@@ -17,13 +17,37 @@
  * };
  */
 class Solution {
+// Using stack to do dfs
+	TreeNode* reverseOddLevels(TreeNode* root)
+	{
+        if (root == nullptr) return root; 
+
+        std::stack<std::tuple<TreeNode*, TreeNode*, bool>> stk;
+        stk.push({root->left, root->right, true});
+
+        while (!stk.empty())
+		{
+            auto [p, q, isOdd] = stk.top();
+            stk.pop();
+
+            if (p == nullptr) continue;
+
+            if (isOdd)
+                std::swap(p->val, q->val);
+
+            stk.push({p->left, q->right, !isOdd});
+            stk.push({p->right, q->left, !isOdd});
+        }
+
+        return root;
+    }
 	public:
 		TreeNode* reverseOddLevels(TreeNode* root) {
 			dfs(root->left, root->right, true);
 			return root;
 		}
 	private:
-		void dfs(TreeNode* p, TreeNode* q, bool isOdd) {
+		void dfs(TreeNode* p, TreeNode* q, const bool isOdd) {
 			if (p == nullptr)
 				return ;
 			if (isOdd)
