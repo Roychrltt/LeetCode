@@ -44,7 +44,6 @@ int orangesRotting(std::vector<std::vector<int>>& grid) {
 	return fresh == 0 ? ans : -1;
 }
 
-
 int main()
 {
 	std::vector<int> v = {};

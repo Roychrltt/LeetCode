@@ -7,15 +7,10 @@
 std::vector<std::vector<int>> permute(std::vector<int>& nums) {
 	std::vector<std::vector<int>> ans;
 	std::sort(nums.begin(), nums.end());
-	std::vector<int> v;
-	for (int i = 0; i < nums.size(); i++)
+	ans.push_back(nums);
+	while (std::next_permutation(nums.begin(), nums.end()))
 	{
-		v.push_back(nums[i]);
-	}
-	ans.push_back(v);
-	while (std::next_permutation(v.begin(), v.end()))
-	{
-		ans.push_back(v);
+		ans.push_back(nums);
 	}
 	return ans;
 }
