@@ -15,6 +15,32 @@ std::vector<std::vector<int>> permute(std::vector<int>& nums) {
 	return ans;
 }
 
+std::vector<std::vector<int>> permute(std::vector<int>& nums) {
+	int n = nums.size();
+	std::vector<std::vector<int>> ans;
+	std::vector<int> set(n), halfSet(n);
+	auto dfs = [&](this auto&& dfs, int i)
+	{
+		if (i == n)
+		{
+			ans.emplace_back(set);
+			return;
+		}
+		for (int j = 0; j < n; j++)
+		{
+			if (!halfSet[j])
+			{
+				set[i] = nums[j];
+				halfSet[j] = 1;
+				dfs(i + 1);
+				halfSet[j] = 0;
+			}
+		}
+	};
+	dfs(0);
+	return ans;
+}
+
 int main()
 {
 	std::vector<int> v = {};
@@ -23,4 +49,4 @@ int main()
 	return 0;
 }
 // runtime beats 100%
-// memory beats 46.99%
+// memory beats 50.99%
