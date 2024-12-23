@@ -4,6 +4,10 @@
 #include <algorithm>
 #include <string>
 
+int searchInsert(vector<int>& nums, int target) {
+	return std::lower_bound(nums.begin(), nums.end(), target) - nums.begin();
+}
+
 int f(std::vector<int>& nums, int target) {
 	int left = 0, right = nums.size() - 1;
 	while (left <= right)
@@ -27,4 +31,4 @@ int main()
 	return 0;
 }
 // runtime beats 100%
-// memory beats 10.15%
+// memory beats 31.96%
