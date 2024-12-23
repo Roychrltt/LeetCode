@@ -6,14 +6,16 @@
 
 int f(std::vector<int>& nums, int target) {
 	int left = 0, right = nums.size() - 1;
-	while (left < right) {
-		int x = (left + right) / 2;
-		if ((nums[0] > target) ^ (nums[0] > nums[x]) ^ (target > nums[x]))
-			left = x + 1;
+	while (left <= right) {
+		int mid = (left + right) >> 1;
+		if (nums[mid] == target)
+			return mid;
+		if (nums[left] <= nums[mid])
+			(target >= nums[left] && target < nums[mid]) ? right = mid - 1 : left = mid + 1;
 		else
-			right = x;
+			(target > nums[mid] && target <= nums[right]) ? left = mid + 1 : right = mid - 1;
 	}
-	return left == right && nums[left] == target ? left : -1;
+	return -1;
 }
 
 int main()
@@ -24,4 +26,4 @@ int main()
 	return 0;
 }
 // runtime beats 100%
-// memory beats 17.72%
+// memory beats 28.50%
