@@ -5,6 +5,16 @@
 #include <string>
 
 int maxSubArray(vector<int>& nums) {
+	// DP
+	/*
+	   int ans = std::numeric_limits<int>::min();
+	   int temp = 0;
+	   for (int x : nums)
+	   {
+	   temp = std::max(temp, 0) + x;
+	   ans = std::max(ans, temp);
+	   }
+	   */
 	int ans = INT_MIN;
 	int minPresum = 0;
 	int presum = 0;
@@ -23,5 +33,6 @@ int main()
 	std::cout << ans << std::endl;
 	return 0;
 }
+std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " "));
 // runtime beats 100%
 // memory beats 21.53%
