@@ -5,7 +5,7 @@
 #include <string>
 
 int waysToSplitArray(std::vector<int>& nums) {
-	//long long total = std::reduce(nums.begin(), nums.end());
+	//long long total = std::reduce(nums.begin(), nums.end(), 0LL);
 	long long total = 0;
 	for (long long n : nums)
 		total += n;

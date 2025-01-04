@@ -17,6 +17,24 @@ int lengthOfLIS(vector<int>& nums) {
 	return v.size();
 }
 
+// DP
+int lengthOfLIS(std::vector<int>& nums) {
+	int n = nums.size();
+	std::vector<int> v(n, 1);
+	int ans = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if (nums[j] < nums[i])
+				if (v[i] < v[j] + 1)
+					v[i] = v[j] + 1;
+		}
+		ans = std::max(v[i], ans);
+	}
+	return ans;
+}
+
 int main()
 {
 	std::vector<int> v = {};
