@@ -18,6 +18,18 @@ std::vector<int> grayCode(int n) {
 	return ans;
 }
 
+std::vector<int> grayCode(int n) {
+	std::vector<int> ans;
+
+	int total = 1 << n;
+	for (int i = 0; i < total; i++)
+	{
+		int gray = i ^ (i >> 1);
+		ans.push_back(gray);
+	}
+	return ans;
+}
+
 int main()
 {
 	std::vector<int> v = {};
