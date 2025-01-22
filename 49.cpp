@@ -27,5 +27,5 @@ int main()
 	std::cout << ans << std::endl;
 	return 0;
 }
-// runtime beats 80.22%
-// memory beats 86.01%
+// runtime beats 86.75%
+// memory beats 92.01%
