@@ -29,13 +29,9 @@ bool f(int n, std::vector<std::vector<int>>& pres)
 		order.push_back(course);
 
 		for (int neighbour : graph[course])
-		{
-			inDegree[neighbour]--;
-			if (inDegree[neighbour] == 0) q.push(neighbour);
-		}
+			if (--inDegree[neighbour] == 0) q.push(neighbour);
 	}
-	if (order.size() == n) return true;
-	return false;
+	return order.size() == n;
 }
 
 int main()
@@ -45,5 +41,5 @@ int main()
 	std::cout << std::boolalpha << ans << std::endl;
 	return 0;
 }
-// runtime beats 71.38%
-// memory beats 56.60%
+// runtime beats 100%
+// memory beats 76.12%

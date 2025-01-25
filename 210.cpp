@@ -14,10 +14,9 @@ vector<int> findOrder(int n, vector<vector<int>>& pres) {
 	}
 
 	std::queue<int> q;
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; i++)
 		if (inDegree[i] == 0)
 			q.push(i);
-	}
 
 	std::vector<int> order;
 	while (!q.empty()) {
@@ -25,11 +24,9 @@ vector<int> findOrder(int n, vector<vector<int>>& pres) {
 		q.pop();
 		order.push_back(course);
 
-		for (int neighbour : graph[course]) {
-			inDegree[neighbour]--;
-			if (inDegree[neighbour] == 0)
+		for (int neighbour : graph[course])
+			if (--inDegree[neighbour] == 0)
 				q.push(neighbour);
-		}
 	}
 	if (order.size() == n)
 		return order;
