@@ -19,6 +19,18 @@ int maxAbsoluteSum(vector<int>& nums) {
 	return std::max(std::abs(minSum), maxSum);
 }
 
+int maxAbsoluteSum(vector<int>& nums) {
+	int sum = 0;
+	int maxsum = 0, minsum = 0;
+	for (int x : nums)
+	{
+		sum += x;
+		if (sum < minsum) minsum = sum;
+		else if (sum > maxsum) maxsum = sum;
+	}
+	return maxsum - minsum;
+}
+
 int main()
 {
 	std::vector<int> v = {};
@@ -27,4 +39,4 @@ int main()
 	return 0;
 }
 // runtime beats 100%
-// memory beats 12.10%
+// memory beats 51.09%

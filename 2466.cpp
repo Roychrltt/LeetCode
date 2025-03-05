@@ -5,7 +5,7 @@
 #include <string>
 
 int countGoodStrings(int low, int high, int zero, int one) {
-	const int MOD = 1'000'000'007;
+	const int MOD = 1e9 + 7;
 	std::vector<int> dp(high + 1);
 	dp[0] = 1;
 
