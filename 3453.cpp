@@ -1,33 +1,34 @@
 #include <bits/stdc++.h>
 
-double separateSquares(vector<vector<int>>& v) {
-	sort(v.begin(), v.end(), [&](auto& a, auto& b){ 
-			return (a[1] < b[1] || (a[1] == b[1] && a[2] < b[2]));});
-	int n = v.size();
-	double bottom = v[0][1];
-	double top = bottom;
-	long double total = 0;
-	for (auto& a : v)
+double separateSquares(vector<vector<int>>& s) {
+	long double up = 0, down = 0;
+	sort(s.begin(), s.end(), [](auto& a, auto& b){
+			if (a[1] < b[1]) return true;
+			else if (a[1] == b[1]) return a[2] > b[2];
+			else return false;
+			});
+	down = s[0][1];
+	long double sum = 0;
+	for (auto& a : s)
 	{
-		top = std::max(top, (double)a[1] + a[2]);
-		total += (double)a[2] * a[2];
+		up = std::max((long double)a[1] + a[2], up);
+		sum += (double)a[2] * a[2];
 	}
-	constexpr double e = 1e-6;
-	while (bottom + e < top)
+	sum /= 2;
+	const double E = 10e-6;
+	while (down + E < up)
 	{
-		long double sum = 0;
-		double mid = (bottom + top) / 2.0;
-		for (auto& a : v)
+		long double area = 0;
+		long double mid = (down + up) / 2;
+		for (int i = 0; i < s.size(); i++)
 		{
-			if (a[1] < mid)
-				sum += (double)a[2] * std::min(mid - a[1], (double)a[2]);
+			if (s[i][1] > mid) break;
+			area += (long double)s[i][2] * std::min((long double)s[i][2], mid - s[i][1]);
 		}
-		if (sum * 2 < total)
-			bottom = mid;
-		else
-			top = mid;
+		if (area < sum) down = mid;
+		else up = mid;
 	}
-	return (top + bottom) / 2.0;
+	return down;
 }
 
 int main()
@@ -37,5 +38,5 @@ int main()
 	std::cout << ans << std::endl;
 	return 0;
 }
-// runtime beats %
-// memory beats %
+// runtime beats 39.32%
+// memory beats 25.91%
