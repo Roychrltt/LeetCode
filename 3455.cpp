@@ -1,78 +1,118 @@
 #include <bits/stdc++.h>
 
-using namespace std;
-
-static std::vector<int> getZBox(const std::string &s) {
-	int n = s.size();
-	std::vector<int> z(n, 0);
-	int l = 0, r = 0;
-	z[0] = n;
-
-	for (int i = 1; i < n; ++i) {
-		if (i <= r) {
-			z[i] = min(z[i - l], r - i + 1);
+class Solution {
+	std::vector<int> computeLPS(const std::string& pattern) {
+		int n = pattern.size();
+		std::vector<int> lps(n, 0);
+		int len = 0;
+		int i = 1;
+		while (i < n) {
+			if (pattern[i] == pattern[len])
+				lps[i++] = ++len;
+			else {
+				if (len > 0)
+					len = lps[len - 1];
+				else
+					i++;
+			}
 		}
-		while (i + z[i] < n && s[z[i]] == s[i + z[i]]) {
-			++z[i];
+		return lps;
+	}
+
+	void kmp(const std::string& pattern, const std::string& text, std::vector<int>& v) {
+		if (pattern == "") {
+			v.resize(text.length());
+			std::iota(v.begin(), v.end(), 0);
+			return;
 		}
-		if (i + z[i] - 1 > r) {
-			l = i;
-			r = i + z[i] - 1;
+		int n = text.size(), m = pattern.size();
+		std::vector<int> lps = computeLPS(pattern);
+
+		int i = 0, j = 0;
+		while (i < n) {
+			if (text[i] == pattern[j]) {
+				i++;
+				j++;
+			}
+			if (j == m) {
+				v.push_back(i - j);
+				j = lps[j - 1];
+			} else if (i < n && text[i] != pattern[j]) {
+				if (j > 0)
+					j = lps[j - 1];
+				else
+					i++;
+			}
 		}
 	}
-	return z;
-}
 
-int f(std::string s, std::string p) {
-	std::vector<int> tmp = {-1};
-	for (int i = 0; i < p.size(); ++i) {
-		if (p[i] == '*')
-			tmp.push_back(i);
-	}
-	tmp.push_back(p.size());
-
-	std::vector<std::string> ps;
-	for (int i = 1; i < tmp.size(); ++i) {
-		ps.push_back(p.substr(tmp[i - 1] + 1, tmp[i] - tmp[i - 1] - 1));
-	}
-
-	std::vector<std::vector<int>> zbox;
-	for (const auto &tmps : ps) {
-		string combined = tmps + "#" + s;
-		vector<int> z = getZBox(combined);
-		zbox.push_back(vector<int>(z.begin() + tmps.size() + 1, z.end()));
-	}
-
-	int n = s.size(), ans = INT_MAX;
-	std::vector<std::vector<int>> dp(n + 1, std::vector<int>(4, -1));
-
-	function<int(int, int)> dfs = [&](int i, int t) -> int {
-		if (t == 3) return i;
-		if (dp[i][t] != -1) return dp[i][t];
-
+public:
+	int shortestMatchingSubstring(string s, string p) {
+		int n = s.size();
+		int first = p.find('*');
+		int second = p.find('*', first + 1);
+		std::string sub1 = p.substr(0, first);
+		std::string sub2 = p.substr(first + 1, second - first - 1);
+		std::string sub3 = p.substr(second + 1);
+		std::vector<int> v1, v2, v3;
+		kmp(sub1, s, v1);
+		kmp(sub2, s, v2);
+		kmp(sub3, s, v3);
+		int n1 = v1.size(), n2 = v2.size(), n3 = v3.size();
+		if (!n1 || !n2 || !n3)
+			return -1;
+		if (sub2 == "" && sub3 == "")
+			return sub1.size();
+		if (sub1 == "" && sub3 == "")
+			return sub2.size();
+		if (sub2 == "" && sub1 == "")
+			return sub3.size();
 		int ans = INT_MAX;
-		if (ps[t].empty())
-			ans = min(ans, dfs(i, t + 1));
-		else if (i == n)
-			ans = INT_MAX;
-		else if (zbox[t][i] == ps[t].size())
-			ans = min(ans, dfs(i + ps[t].size(), t + 1));
-		else if (t == 0)
-			ans = INT_MAX;
-		else
-			ans = min(ans, dfs(i + 1, t));
-
-		return dp[i][t] = ans;
-	};
-
-	for (int i = 0; i < n; ++i) {
-		int j = dfs(i, 0);
-		if (j != INT_MAX)
-			ans = std::min(res, j - i);
+		int a = 0, b = 0, c = 0;
+		if (sub1 == "") {
+			while (b < n2) {
+				while (c < n3 && v3[c] < v2[b] + sub2.size())
+					c++;
+				if (c == n3)
+					break;
+				ans = std::min(ans, (int)(v3[c] - v2[b] + sub3.size()));
+				b++;
+			}
+		} else if (sub2 == "") {
+			while (a < n1) {
+				while (c < n3 && v3[c] < v1[a] + sub1.size())
+					c++;
+				if (c == n3)
+					break;
+				ans = std::min(ans, (int)(v3[c] - v1[a] + sub3.size()));
+				a++;
+			}
+		} else if (sub3 == "") {
+			while (a < n1) {
+				while (b < n2 && v2[b] < v1[a] + sub1.size())
+					b++;
+				if (b == n2)
+					break;
+				ans = std::min(ans, (int)(v2[b] - v1[a] + sub2.size()));
+				a++;
+			}
+		} else {
+			while (a < n1) {
+				while (b < n2 && v2[b] < v1[a] + sub1.size())
+					b++;
+				if (b == n2)
+					break;
+				while (c < n3 && v3[c] < v2[b] + sub2.size())
+					c++;
+				if (c == n3)
+					break;
+				ans = std::min(ans, (int)(v3[c] - v1[a] + sub3.size()));
+				a++;
+			}
+		}
+		return ans == INT_MAX ? -1 : ans;
 	}
-
-	return ans == INT_MAX ? -1 : ans;
-}
+};
 
 int main()
 {
@@ -81,5 +121,5 @@ int main()
 	std::cout << ans << std::endl;
 	return 0;
 }
-// runtime beats %
-// memory beats %
+// runtime beats 98.36%
+// memory beats 50.57%
