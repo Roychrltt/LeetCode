@@ -7,12 +7,12 @@
 int minimumOperations(vector<int>& nums) {
 	int count = 0;
 	int n = nums.size();
-	std::unordered_map<int, int> map;
+	vector<int> cnt(101, 0);
 	for (int i = n - 1; i >= 0; i--)
 	{
-		if (map.count(nums[i]) > 0)
+		if (cnt[nums[i]]++ > 0)
 			break;
-		map[nums[i]] = nums[i];
+		cnt[nums[i]] = nums[i];
 		count++;
 	}
 	return (n - count + 2) / 3;
@@ -25,5 +25,5 @@ int main()
 	std::cout << ans << std::endl;
 	return 0;
 }
-// runtime beats 75.89%
-// memory beats 87.66%
+// runtime beats 100%
+// memory beats 90.53%
