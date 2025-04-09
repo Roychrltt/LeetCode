@@ -5,20 +5,15 @@
 #include <string>
 
 int f(std::vector<int>& nums, int k) {
-	std::sort(nums.begin(), nums.end());
-	if (nums[0] < k)
-		return -1;
-	int prev = nums[0];
-	int count = 0;
-	for (int i = 0; i < nums.size(); i++)
+	int cnt = 0;
+	bool ok = true;
+	array<int, 101> a = {0};
+	for (int i : nums)
 	{
-		if (nums[i] == prev && i != 0)
-			continue;
-		prev = nums[i];
-		if (nums[i] > k)
-			count++;
+		if (i < k) return -1;
+		if (i > k && a[i]++ == 0) cnt++;
 	}
-	return count;
+	return cnt;
 }
 
 int main()
