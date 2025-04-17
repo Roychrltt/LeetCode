@@ -27,4 +27,4 @@ int main()
 	return 0;
 }
 // runtime beats 100%
-// memory beats 7.22%
+// memory beats 14.53%
