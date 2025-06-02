@@ -4,37 +4,22 @@
 #include <algorithm>
 #include <string>
 
-int f(std::vector<int>& ratings) {
-	int sum = 0;
-	int n = ratings.size();
-	int i = 1;
-	while (i < n)
-	{
-		if (ratings[i] == ratings[i - 1])
-		{
-			i++;
-			continue;
-		}
+int candy(vector<int>& r) {
+	int n = r.size();
+	vector<int> candies(n, 1);
 
-		int maxC = 0;
-		while (i < n && ratings[i] > ratings[i - 1])
-		{
-			maxC++;
-			sum += maxC;
-			i++;
-		}
-		if (i == n)
-			break;
-		int minC = 0;
-		while (i < n && ratings[i] < ratings[i - 1])
-		{
-			minC++;
-			sum += minC;
-			i++;
-		}
-		sum -= std::min(minC, maxC);
+	int ans = 0;
+	for (int i = 1; i < n; i++)
+	{
+		if (r[i] > r[i - 1]) candies[i] = candies[i - 1] + 1;
 	}
-	return sum + n;
+	for (int i = n - 1; i > 0; i--)
+	{
+		if (r[i - 1] > r[i]) candies[i - 1] = max(candies[i - 1], candies[i] + 1);
+		ans += candies[i - 1];
+	}
+
+	return ans + candies[n - 1];
 }
 
 int main()
